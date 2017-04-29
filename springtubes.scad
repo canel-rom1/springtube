@@ -14,14 +14,14 @@
 /* Variables */
 /*************/
 
-thinkness = 2;								// Thinkness
+thinkness = 2;                              // Thinkness
 
-tube_diameter = 15;							// Diameter test tube
-spring_space = 18;							// Space between the spring
-base_length = 80;							// Base's length
-spring_width = tube_diameter + 2*thinkness;	// Spring's length
-numbers_coils = 4;							// Numbers of spring coils
-width = spring_width;						// Width
+tube_diameter = 15;                         // Diameter test tube
+spring_space = 18;                          // Space between the spring
+base_length = 80;                           // Base's length
+spring_width = tube_diameter + 2*thinkness; // Spring's length
+numbers_coils = 4;                          // Numbers of spring coils
+width = spring_width;                       // Width
 
 
 /***********/
