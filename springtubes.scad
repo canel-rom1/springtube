@@ -1,48 +1,48 @@
-/****************************************************************/
-/* File: springTubes.scad					*/
-/* Version: v1							*/
-/* Create by: Rom1 <rom1@canel.ch>				*/
-/*            CANEL - https://www.canel.ch			*/
-/* Date: 28 avril 2017						*/
-/* License: GNU GENERAL PUBLIC LICENSE v3			*/
-/* Programme: openscad						*/
-/* Description:	Test's tube support like spring			*/
-/****************************************************************/
+/****************************************************/
+/* File: springTubes.scad						    */
+/* Version: v1.1								    */
+/* Create by: Rom1 <rom1@canel.ch>				    */
+/*            CANEL - https://www.canel.ch		    */
+/* Date: 28 avril 2017							    */
+/* License: GNU GENERAL PUBLIC LICENSE v3		    */
+/* Programme: openscad							    */
+/* Description:	Test's tube support like spring	    */
+/****************************************************/
 
 
 /*************/
 /* Variables */
 /*************/
 
-th = 2;			// Thinkness
+thinkness = 2;								// Thinkness
 
-dt = 15;       		// Diameter tube
-ss = 18;        	// Space between the spring
-bl = 80;        	// Base's length
-sl = dt + 2*th;		// Spring's length
-sc = 4;  		// Numbers of spring coils
-wi = sl;		// Width
+tube_diameter = 15;							// Diameter test tube
+spring_space = 18;							// Space between the spring
+base_length = 80;							// Base's length
+spring_width = tube_diameter + 2*thinkness;	// Spring's length
+numbers_coils = 4;							// Numbers of spring coils
+width = spring_width;						// Width
 
 
 /***********/
 /* Modules */
 /***********/
 
-module halfCircle(diameter = 20, thinkness = 2, orient = 0) {
-	translate([0, (diameter + thinkness)/2, 0])
+module halfCircle(dia = 20, tn = 2, orient = 0) {
+	translate([0, (dia + tn)/2, 0])
 	difference(){
-		circle(d = diameter + thinkness);
-		circle(d = diameter - thinkness);
-		rotate([0, 0, orient]) translate([0, -(diameter + thinkness)/2]) square([(ss + th)/2, ss + th]);
+		circle(d = dia + tn);
+		circle(d = dia - tn);
+		rotate([0, 0, orient]) translate([0, -(dia + tn)/2]) square([(spring_space + tn)/2, spring_space + tn]);
 	}
 }
 
 module halfLoop(orient = "left", end = "no"){
 	module piece(){
-		halfCircle(ss, th);
-		translate([0, ss]) square([sl, th]);
+		halfCircle(spring_space, thinkness);
+		translate([0, spring_space]) square([spring_width, thinkness]);
 		if(end == "yes"){
-			translate([sl, ss]) square([ss/2, th]);
+			translate([spring_width, spring_space]) square([spring_space/2, thinkness]);
 		}
 	}
 	if(orient == "left") {
@@ -56,9 +56,9 @@ module halfLoop(orient = "left", end = "no"){
 module loop(orient = "left", end = "no"){
 	module piece(orient = "left"){
 		halfLoop();
-		translate([sl, ss]) mirror([1, 0, 0]) halfLoop();
+		translate([spring_width, spring_space]) mirror([1, 0, 0]) halfLoop();
 		if(end == "yes"){
-			translate([-ss/2, 2*ss]) square([ss/2, th]);
+			translate([-spring_space/2, 2*spring_space]) square([spring_space/2, thinkness]);
 		}
 	}
 	if(orient == "left"){
@@ -69,35 +69,35 @@ module loop(orient = "left", end = "no"){
 	}
 }
 
-module form3d(){
-	linear_extrude(height = wi) {
-		square([bl, th]);    // Base
+module form3d(height){
+	linear_extrude(height) {
+		square([base_length, thinkness]);    // Base
 
 
-		if(sc % 2 == 0){
-			if(sc == 2){
-				translate([0, (sc - 2)*ss]) loop("left", end = "yes");
-				translate([bl, (sc - 2)*ss]) loop("right", end = "yes");
+		if(numbers_coils % 2 == 0){
+			if(numbers_coils == 2){
+				translate([0, (numbers_coils - 2)*spring_space]) loop("left", end = "yes");
+				translate([base_length, (numbers_coils - 2)*spring_space]) loop("right", end = "yes");
 			}else{
-				for(i = [0:sc/2-1]){
-					translate([0, i*2*ss]) loop("left");
-					translate([bl, i*2*ss]) loop("right");
+				for(i = [0:numbers_coils/2-1]){
+					translate([0, i*2*spring_space]) loop("left");
+					translate([base_length, i*2*spring_space]) loop("right");
 				}
-				translate([0, (sc - 2)*ss]) loop("left", end = "yes");
-				translate([bl, (sc - 2)*ss]) loop("right", end = "yes");
+				translate([0, (numbers_coils - 2)*spring_space]) loop("left", end = "yes");
+				translate([base_length, (numbers_coils - 2)*spring_space]) loop("right", end = "yes");
 			}
 		}else{
-			if(sc == 1){
-				translate([0, (sc - 1)*ss]) halfLoop("left", end = "yes");
-				translate([bl, (sc - 1)*ss]) halfLoop("right", end = "yes");
+			if(numbers_coils == 1){
+				translate([0, (numbers_coils - 1)*spring_space]) halfLoop("left", end = "yes");
+				translate([base_length, (numbers_coils - 1)*spring_space]) halfLoop("right", end = "yes");
 
 			}else{
-				for(i = [0:sc/2-1]){
-					translate([0, 2*i*ss]) loop("left");
-					translate([bl, 2*i*ss]) loop("right");
+				for(i = [0:numbers_coils/2-1]){
+					translate([0, 2*i*spring_space]) loop("left");
+					translate([base_length, 2*i*spring_space]) loop("right");
 				}
-					translate([0, (sc - 1)*ss]) halfLoop("left", end = "yes");
-					translate([bl, (sc - 1)*ss]) halfLoop("right", end = "yes");
+					translate([0, (numbers_coils - 1)*spring_space]) halfLoop("left", end = "yes");
+					translate([base_length, (numbers_coils - 1)*spring_space]) halfLoop("right", end = "yes");
 			}
 		}
 	}
@@ -109,7 +109,9 @@ module form3d(){
 /********/
 
 difference(){
-	form3d();
-	translate([ss/2, th, wi/2]) rotate([270, 0, 0]) cylinder(d = dt, h = sc*ss+th);
-	translate([bl - ss/2, th, wi/2]) rotate([270, 0, 0]) cylinder(d = dt, h = sc*ss+th);
+	form3d(width);
+	translate([spring_space/2, thinkness, width/2]) rotate([270, 0, 0]) cylinder(d = tube_diameter, h = numbers_coils*spring_space+thinkness);
+	translate([base_length - spring_space/2, thinkness, width/2]) rotate([270, 0, 0]) cylinder(d = tube_diameter, h = numbers_coils*spring_space+thinkness);
 }
+
+// vim: ft=openscad tw=100 et ts=4 sw=4
