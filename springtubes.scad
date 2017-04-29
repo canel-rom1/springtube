@@ -1,12 +1,12 @@
 /****************************************************/
-/* File: springTubes.scad						    */
-/* Version: v1.1								    */
-/* Create by: Rom1 <rom1@canel.ch>				    */
-/*            CANEL - https://www.canel.ch		    */
-/* Date: 28 avril 2017							    */
-/* License: GNU GENERAL PUBLIC LICENSE v3		    */
-/* Programme: openscad							    */
-/* Description:	Test's tube support like spring	    */
+/* File: springTubes.scad                           */
+/* Version: v1.1                                    */
+/* Create by: Rom1 <rom1@canel.ch>                  */
+/*            CANEL - https://www.canel.ch          */
+/* Date: 28 avril 2017                              */
+/* License: GNU GENERAL PUBLIC LICENSE v3           */
+/* Programme: openscad                              */
+/* Description:	Test's tube support like spring     */
 /****************************************************/
 
 
