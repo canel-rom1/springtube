@@ -1,9 +1,10 @@
 /****************************************************/
+/* Project name: springTube                         */
 /* File: springTubes.scad                           */
-/* Version: v1.1                                    */
+/* Version: v1.2                                    */
 /* Create by: Rom1 <rom1@canel.ch>                  */
 /*            CANEL - https://www.canel.ch          */
-/* Date: 28 avril 2017                              */
+/* Date: 01 mai 2017                                */
 /* License: GNU GENERAL PUBLIC LICENSE v3           */
 /* Programme: openscad                              */
 /* Description: Test's tube support like spring     */
@@ -16,12 +17,13 @@
 
 thinkness = 2;                              // Thinkness
 
-tube_diameter = 15;                         // Diameter test tube
-spring_space = 18;                          // Space between the spring
+numbres_tubes = 1;                          // Numbers of test tubes
+tube_diameter = 15.5;                       // Diameter test tube
+spring_space = 22;                          // Space between the spring
 base_length = 80;                           // Base's length
 spring_width = tube_diameter + 2*thinkness; // Spring's length
 numbers_coils = 4;                          // Numbers of spring coils
-width = spring_width;                       // Width
+width = spring_width + 6;                   // Width
 
 
 /***********/
@@ -71,33 +73,48 @@ module loop(orient = "left", end = "no"){
 
 module form3d(height){
 	linear_extrude(height) {
-		square([base_length, thinkness]);    // Base
-
+        if(numbres_tubes > 1){
+            square([base_length, thinkness]);    // Base
+        }else{
+            square([spring_width + spring_space/2, thinkness]);
+        }
 
 		if(numbers_coils % 2 == 0){
 			if(numbers_coils == 2){
-				translate([0, (numbers_coils - 2)*spring_space]) loop("left", end = "yes");
-				translate([base_length, (numbers_coils - 2)*spring_space]) loop("right", end = "yes");
+                translate([0, (numbers_coils - 2)*spring_space]) loop("left", end = "yes");
+                if(numbres_tubes >=1){
+                    translate([base_length, (numbers_coils - 2)*spring_space]) loop("right", end = "yes");
+                }
 			}else{
 				for(i = [0:numbers_coils/2-1]){
-					translate([0, i*2*spring_space]) loop("left");
-					translate([base_length, i*2*spring_space]) loop("right");
+                    translate([0, i*2*spring_space]) loop("left");
+                    if(numbres_tubes > 1){
+                        translate([base_length, i*2*spring_space]) loop("right");
+                    }
 				}
-				translate([0, (numbers_coils - 2)*spring_space]) loop("left", end = "yes");
-				translate([base_length, (numbers_coils - 2)*spring_space]) loop("right", end = "yes");
+                translate([0, (numbers_coils - 2)*spring_space]) loop("left", end = "yes");
+                if(numbres_tubes > 1){
+                    translate([base_length, (numbers_coils - 2)*spring_space]) loop("right", end = "yes");
+                }
 			}
 		}else{
 			if(numbers_coils == 1){
-				translate([0, (numbers_coils - 1)*spring_space]) halfLoop("left", end = "yes");
-				translate([base_length, (numbers_coils - 1)*spring_space]) halfLoop("right", end = "yes");
+                translate([0, (numbers_coils - 1)*spring_space]) halfLoop("left", end = "yes");
+                if(numbres_tubes > 1){
+                    translate([base_length, (numbers_coils - 1)*spring_space]) halfLoop("right", end = "yes");
+                }
 
 			}else{
 				for(i = [0:numbers_coils/2-1]){
 					translate([0, 2*i*spring_space]) loop("left");
-					translate([base_length, 2*i*spring_space]) loop("right");
+                    if(numbres_tubes > 1){
+                        translate([base_length, 2*i*spring_space]) loop("right");
+                    }
 				}
 					translate([0, (numbers_coils - 1)*spring_space]) halfLoop("left", end = "yes");
-					translate([base_length, (numbers_coils - 1)*spring_space]) halfLoop("right", end = "yes");
+                    if(numbres_tubes > 1){
+                        translate([base_length, (numbers_coils - 1)*spring_space]) halfLoop("right", end = "yes");
+                    }
 			}
 		}
 	}
@@ -111,7 +128,11 @@ module form3d(height){
 difference(){
 	form3d(width);
 	translate([spring_space/2, thinkness, width/2]) rotate([270, 0, 0]) cylinder(d = tube_diameter, h = numbers_coils*spring_space+thinkness);
-	translate([base_length - spring_space/2, thinkness, width/2]) rotate([270, 0, 0]) cylinder(d = tube_diameter, h = numbers_coils*spring_space+thinkness);
+    if(numbres_tubes > 1){
+        translate([base_length - spring_space/2, thinkness, width/2]) rotate([270, 0, 0])
+            cylinder(d = tube_diameter, h = numbers_coils*spring_space+thinkness);
+    }
 }
+
 
 // vim: ft=openscad tw=100 et ts=4 sw=4
