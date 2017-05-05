@@ -7,7 +7,7 @@
 /* Date: 01 mai 2017                                */
 /* License: GNU GENERAL PUBLIC LICENSE v3           */
 /* Programme: openscad                              */
-/* Description: Test's tube support like spring     */
+/* Description: Test tube support like spring       */
 /****************************************************/
 
 
@@ -18,7 +18,7 @@
 thinkness = 2;                              // Thinkness
 
 numbres_tubes = 1;                          // Numbers of test tubes
-tube_diameter = 15.5;                       // Diameter test tube
+tube_diameter = 15.5;                       // Diameter of test tube
 spring_space = 22;                          // Space between the spring
 base_length = 80;                           // Base's length
 spring_width = tube_diameter + 2*thinkness; // Spring's length
